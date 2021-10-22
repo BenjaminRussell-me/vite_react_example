@@ -8,31 +8,30 @@ function App() {
 		id: number;
 		name: string;
 		price: number;
+	}
+
+	interface cartItem extends item {
 		quantity: number;
 		final_price: number;
 	}
-	class Item implements item{
-		id: number;
-		name: string;
-		price: number;
-		quantity: number;
-		final_price: number;
-		constructor(id: number, name: string , price: number, quantity: number) {
-    this.id = id;
-    this.name = name;
-		this.quantity = quantity;
-    this.price = price;
-		this.final_price = price;
-  }
-}
+
+	function create_item(id:number,name:string,price:number) {
+					return {id,name,price}
+	}
 
 //cart and items
 
-let [cart, set_cart] = useState<Array<item>>([])
+	function create_cart_item(item:item, quantity:number) {
+					const final_price = item.price * quantity;
 
-let apple_juice = new Item(1, 'apple juice', 5.50, 1);
-let bread = new Item(2, 'bread', 2.50, 1);
-let dog_food = new Item(3, 'dog food', 12.30, 1);
+					return {...item,quantity,final_price}
+	}
+
+	let [cart, set_cart] = useState<Array<cartItem>>([])
+
+let apple_juice = create_item(1, 'apple juice', 3.75); 
+let bread = create_item(2, 'bread', 2.50);
+let dog_food = create_item(3, 'dog food', 12.30);
 
 let items_on_page = [apple_juice, bread, dog_food];
 
@@ -40,7 +39,7 @@ let items_on_page = [apple_juice, bread, dog_food];
 
 const [total, set_total] = useState(0);
 
-function get_total(item:item) {
+function get_total() {
 				set_total(0)	
 				cart.forEach((cart_item) => {	
 					set_total(total + cart_item.final_price)	
@@ -51,10 +50,9 @@ function get_total(item:item) {
 let [quantity, set_quanatity] = useState(2)
 
 function item_choose(chosen:item) {
-	chosen.quantity = quantity;
-	chosen.final_price = chosen.price * chosen.quantity; 
- 	cart.push(chosen);
- 	get_total(chosen); 
+				const cart_item = create_cart_item(chosen, quantity)
+ 	cart.push(cart_item);
+	get_total(); 
   console.table(cart)
 }
 
