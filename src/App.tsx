@@ -27,7 +27,7 @@ function App() {
 					return {...item,quantity,final_price}
 	}
 
-	let [cart, set_cart] = useState<Array<cartItem>>([])
+	let [cart, set_cart] = useState<Map<number,cartItem>>(new Map())
 
 let apple_juice = create_item(1, 'apple juice', 3.75); 
 let bread = create_item(2, 'bread', 2.50);
@@ -51,7 +51,7 @@ let [quantity, set_quanatity] = useState(2)
 
 function item_choose(chosen:item) {
 				const cart_item = create_cart_item(chosen, quantity)
- 	cart.push(cart_item);
+ 	cart.set(cart_item.id,cart_item);
 	get_total(); 
   console.table(cart)
 }
